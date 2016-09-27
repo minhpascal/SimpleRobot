@@ -1,0 +1,56 @@
+﻿<Window x:Class="CommonRobot.PortfolioPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+        xmlns:OpenSpreader="clr-namespace:CommonRobot"
+        Title="Выбор потрфеля" Height="178" Width="292" WindowStartupLocation="CenterScreen">
+
+	<Window.CommandBindings>
+		<CommandBinding Command="{x:Static OpenSpreader:PortfolioPickerWindow.PickPortfolioCommand}"
+                    Executed="ExecutedPickPortfolio"
+                    CanExecute="CanExecutePickPortfolio" />
+	</Window.CommandBindings>
+
+	<Window.Resources>
+		<Converters:ListViewBackgroundConvertor x:Key="myConverter" />
+		
+		<Style x:Key="myItemStyle" TargetType="{x:Type ListViewItem}">
+			<Setter Property="Background">
+				<Setter.Value>
+					<Binding RelativeSource="{RelativeSource Self}" Converter="{StaticResource myConverter}"/>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+			<Setter Property="VerticalContentAlignment" Value="Stretch" />
+			<EventSetter Event="MouseDoubleClick" Handler="HandleDoubleClick" />
+		</Style>
+	</Window.Resources>
+	
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<ListView Grid.Row="0" x:Name="listViewPortfolios" ItemContainerStyle="{StaticResource myItemStyle}" TabIndex="2" >
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Width="150" Header="Название" DisplayMemberBinding="{Binding Path=Name}" />
+					<GridViewColumn Width="100" Header="Нач. Сумма" DisplayMemberBinding="{Binding Path=BeginValue}" />
+				</GridView>
+			</ListView.View>
+		</ListView>
+
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="auto"/>
+			</Grid.ColumnDefinitions>
+
+			<Button Grid.Column="1" Content="OK" IsDefault="True" Width="80" Margin="3" Command="{x:Static OpenSpreader:PortfolioPickerWindow.PickPortfolioCommand}" TabIndex="3" />
+			<Button Grid.Column="2" Content="Отмена" IsCancel="True" Width="80" Margin="3" TabIndex="4" />
+		</Grid>
+
+	</Grid>
+</Window>
